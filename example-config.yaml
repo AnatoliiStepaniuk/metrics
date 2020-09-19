@@ -2,3 +2,7 @@ bitbucket:
   uuid: YOUR_BITBUCKET_USER_UUID
   username: YOUR_BITBUCKET_USERNAME
   app_password: YOUR_BITBUCKET_APP_PASSWORD
+toggl:
+  api_token: YOUR_API_TOKEN
+  email: YOUR_EMAIL
+  workspace_id: YOUR_WORKSPACE_ID
