@@ -21,5 +21,3 @@ def get_cards():
     finish = html.find('</b>', start)
     total_cards = int(html[start: finish])
     return total_cards
-
-print(get_cards())

@@ -32,6 +32,3 @@ def get_prs():
             break
 
     return prs
-
-
-print(get_prs())

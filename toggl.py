@@ -18,5 +18,3 @@ def get_hours():
 
     resp = requests.get(url, auth=(api_token, 'api_token'))
     return round(resp.json()['total_grand']/HOUR_IN_MILLIS)
-
-print(get_hours())
