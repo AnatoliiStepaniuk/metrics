@@ -25,7 +25,8 @@ def get_hours():
     programming_current_year = round((get_learning(data) + get_job(data))/HOUR_IN_MILLIS)
     programming_total = programming_year_2020 + programming_current_year
 
-    return programming_total
+    hustling_total = round(get_hustling(data)/HOUR_IN_MILLIS)
+    return programming_total, hustling_total
 
 
 def get_learning(data):
@@ -34,4 +35,8 @@ def get_learning(data):
 
 def get_job(data):
     return list(filter(lambda x: x['title']['project'] == 'Tektelic', data))[0]['time']
+
+
+def get_hustling(data):
+    return list(filter(lambda x: x['title']['project'] == 'Hustling', data))[0]['time']
 
