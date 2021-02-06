@@ -7,6 +7,12 @@ HOUR_IN_MILLIS = 3600000
 
 
 def get_hours():
+    since = '2021-01-01'
+    until = arrow.now().format('YYYY-MM-DD')
+    return get_hours_range(since, until)
+
+
+def get_hours_range(since, until):
     with open('config.yaml') as file:
         data = yaml.load(file, Loader=yaml.FullLoader)['toggl']
         api_token = data['api_token']
@@ -14,29 +20,31 @@ def get_hours():
         workspace_id = data['workspace_id']
 
     email_safe = urllib.parse.quote(email)
-    since = '2021-01-01'
-    # until = '2021-01-01'
-    until = arrow.now().format('YYYY-MM-DD')
     url = f'https://api.track.toggl.com/reports/api/v2/summary?user_agent={email_safe}&workspace_id={workspace_id}&since={since}&until={until}'
 
-    programming_year_2020 = 2065
     resp = requests.get(url, auth=(api_token, 'api_token'))
     data = resp.json()['data']
-    programming_current_year = round((get_learning(data) + get_job(data))/HOUR_IN_MILLIS)
-    programming_total = programming_year_2020 + programming_current_year
 
-    hustling_total = round(get_hustling(data)/HOUR_IN_MILLIS)
-    return programming_total, hustling_total
+    return get_learning(data), get_job(data), get_hustling(data)
 
 
 def get_learning(data):
-    return list(filter(lambda x: x['title']['project'] == 'Learning Programming', data))[0]['time']
+    filtered = list(filter(lambda x: x['title']['project'] == 'Learning Programming', data))
+    learning_millis = filtered[0]['time'] if filtered else 0
+    learning_hours = round(learning_millis/HOUR_IN_MILLIS)
+    learning_2020 = 330
+    return learning_2020 + learning_hours
 
 
 def get_job(data):
-    return list(filter(lambda x: x['title']['project'] == 'Tektelic', data))[0]['time']
+    filtered = list(filter(lambda x: x['title']['project'] == 'Tektelic', data))
+    working_millis = filtered[0]['time'] if filtered else 0
+    working_hours = round(working_millis/HOUR_IN_MILLIS)
+    working_2020 = 1733
+    return working_hours + working_2020
 
 
 def get_hustling(data):
-    return list(filter(lambda x: x['title']['project'] == 'Hustling', data))[0]['time']
-
+    filtered = list(filter(lambda x: x['title']['project'] == 'Hustling', data))
+    hustling_millis = filtered[0]['time'] if filtered else 0
+    return round(hustling_millis/HOUR_IN_MILLIS)
