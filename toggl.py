@@ -25,7 +25,7 @@ def get_hours_range(since, until):
     resp = requests.get(url, auth=(api_token, 'api_token'))
     data = resp.json()['data']
 
-    return get_learning(data), get_job(data), get_hustling(data)
+    return get_learning(data), get_job(data), get_hustling(data), get_self_dev(data)
 
 
 def get_learning(data):
@@ -46,5 +46,10 @@ def get_job(data):
 
 def get_hustling(data):
     filtered = list(filter(lambda x: x['title']['project'] == 'Hustling', data))
+    hustling_millis = filtered[0]['time'] if filtered else 0
+    return round(hustling_millis/HOUR_IN_MILLIS)
+
+def get_self_dev(data):
+    filtered = list(filter(lambda x: x['title']['project'] == 'Self Dev', data))
     hustling_millis = filtered[0]['time'] if filtered else 0
     return round(hustling_millis/HOUR_IN_MILLIS)
